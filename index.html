@@ -39,5 +39,11 @@
 </head>
   <body class="bg-slate-900 text-white overflow-hidden select-none touch-manipulation">
     <div id="root"></div>
+    <script>
+      // Polyfill process for browser environments to prevent crashes if it's missing
+      if (typeof process === 'undefined') {
+        window.process = { env: {} };
+      }
+    </script>
   </body>
 </html>
