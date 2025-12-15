@@ -1,10 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
 import { Resources } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export const getCityAdvice = async (resources: Resources, totalBuildings: number): Promise<string> => {
   try {
+    // Initialize inside the function to avoid top-level crashes if process.env is missing at startup
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    
     const prompt = `
       Ты - саркастичный и умный советник мэра в игре про строительство города.
       Текущая статистика города:
@@ -24,7 +25,7 @@ export const getCityAdvice = async (resources: Resources, totalBuildings: number
       contents: prompt,
     });
 
-    return response.text.trim();
+    return response.text?.trim() || "Советник молчит...";
   } catch (error) {
     console.error("AI Error:", error);
     return "Связь с центром советников потеряна... (Проверьте API ключ)";
